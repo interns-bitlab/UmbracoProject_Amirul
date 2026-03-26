@@ -1,0 +1,89 @@
+﻿@model MyCustomUmbracoProject.Models.Item
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Name</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            padding: 40px 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #3b5bdb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-btn:hover { text-decoration: underline; }
+
+        .detail-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .detail-card h2 {
+            font-size: 2rem;
+            color: #222;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #e8f0fe;
+            color: #3b5bdb;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2f9e44;
+            margin-bottom: 24px;
+        }
+
+        .price span { font-size: 1rem; font-weight: 400; color: #888; }
+
+        .item-id {
+            font-size: 0.75rem;
+            color: #aaa;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 16px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ Back button to list -->
+    <a class="back-btn" href="/item/itemlist">← Back to List</a>
+
+    <div class="detail-card">
+        <h2>@Model.Name</h2>
+        <div class="badge">@Model.Type</div>
+        <div class="price">$@Model.Price <span>/ unit</span></div>
+        <div class="item-id">ID: @Model.Id</div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+@model List<MyCustomUmbracoProject.Models.Item>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item List</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2rem;
+        }
+
+        .no-items { text-align: center; color: #888; font-size: 1.2rem; }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title { font-size: 1.2rem; font-weight: 700; color: #222; }
+
+        .card-type {
+            background-color: #e8f0fe;
+            color: #3b5bdb;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .card-price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #2f9e44;
+            margin-bottom: 16px;
+        }
+
+        .card-price span { font-size: 1rem; font-weight: 400; color: #888; }
+
+        .card-id {
+            font-size: 0.7rem;
+            color: #aaa;
+            word-break: break-all;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 12px;
+            margin-top: 8px;
+        }
+
+        /* ✅ Detail link styling */
+        .detail-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #3b5bdb;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .detail-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h1>Item List</h1>
+
+    @if (!Model.Any())
+    {
+        <p class="no-items">No items found.</p>
+    }
+    else
+    {
+        <div class="card-grid">
+            @foreach (var item in Model)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">@item.Name</span>
+                        <span class="card-type">@item.Type</span>
+                    </div>
+
+                    <div class="card-price">
+                        $@item.Price <span>/ unit</span>
+                    </div>
+
+                    <div class="card-id">
+                        ID: @item.Id
+                    </div>
+
+                    <!-- ✅ Clean proper link -->
+                    <a class="detail-link" href="/item/itemlistviewid/@item.Id">
+                        View Details →
+                    </a>
+                </div>
+            }
+        </div>
+    }
+
+</body>
+</html>
