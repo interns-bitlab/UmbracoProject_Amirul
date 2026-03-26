@@ -20,24 +20,24 @@ public class StudentController1(UmbracoHelper umbracoHelper, StudentServices stu
     {
         IEnumerable<IPublishedContent> rootnodes = umbracoHelper.ContentAtRoot();
 
-        var studentnodes = rootnodes.SelectMany(x => x.DescendantsOrSelf()).Where(x => x.ContentType.Alias == "student");
+        var NewStudentNodes = rootnodes.SelectMany(x => x.DescendantsOrSelf()).Where(x => x.ContentType.Alias == "student");
 
 
-        var student = studentnodes.Select(node =>
+        var studentDetail = NewStudentNodes.Select(studentNode =>
         {
-            var courseNodes = node.Value<IEnumerable<IPublishedContent>>("eduPicker");
+            var NewCourseNodes = studentNode.Value<IEnumerable<IPublishedContent>>("eduPicker");
             //var courseNode = courseNodes?.FirstOrDefault();
 
             return new Student
             {
-                Id = node.Key,
-                Name = node.Name ?? "",
-                Age = node.Value<int>("age"),
-                Email = node.Value<string>("email") ?? "",
+                Id = studentNode.Key,
+                Name = studentNode.Name ?? "",
+                Age = studentNode.Value<int>("age"),
+                Email = studentNode.Value<string>("email") ?? "",
 
                 // FIX: Check if courseNode is NOT null first
                 //course = courseNode != null ? new Courses
-                course = courseNodes?.Select(courseNode => new Courses
+                EduPicker = NewCourseNodes?.Select(courseNode => new Courses
                 {
                     Id = courseNode.Key,
                     Name = courseNode.Name ?? "",
@@ -49,7 +49,7 @@ public class StudentController1(UmbracoHelper umbracoHelper, StudentServices stu
         }).ToList();
 
 
-        return Ok(student);
+        return Ok(studentDetail);
     }
 
 
@@ -57,28 +57,28 @@ public class StudentController1(UmbracoHelper umbracoHelper, StudentServices stu
     [Route("studentlist/{id}")]
     public IActionResult GetStudentID(Guid Id)
     {
-        var studentnodes = umbracoHelper.Content(Id);
+        var studentNode = umbracoHelper.Content(Id);
 
-        if (studentnodes == null)
+        if (studentNode == null)
         {
             return NotFound("student missing");
         }
 
         
 
-        var courseNodes = studentnodes.Value<IEnumerable<IPublishedContent>>("eduPicker");
+        var NewCourseNodes = studentNode.Value<IEnumerable<IPublishedContent>>("eduPicker");
 
         //  var courseNode = courseNodes?.FirstOrDefault();
 
-        var student = new Student
+        var studentDetail = new Student
         {
-            Id = studentnodes.Key,
-            Name = studentnodes.Name ?? "",
-            Age = studentnodes.Value<int>("age"),
-            Email = studentnodes.Value<string>("email") ?? "",
+            Id = studentNode.Key,
+            Name = studentNode.Name ?? "",
+            Age = studentNode.Value<int>("age"),
+            Email = studentNode.Value<string>("email") ?? "",
 
             // course = courseNode != null ? new Courses
-            course = courseNodes?.Select(courseNode => new Courses
+            EduPicker = NewCourseNodes?.Select(courseNode => new Courses
             {
                 Id = courseNode.Key,
                 Name = courseNode.Name ?? "",
@@ -92,7 +92,7 @@ public class StudentController1(UmbracoHelper umbracoHelper, StudentServices stu
         };
         
 
-        return Ok(student);
+        return Ok(studentDetail);
     }
 
     [Route("studentview")]
@@ -100,23 +100,23 @@ public class StudentController1(UmbracoHelper umbracoHelper, StudentServices stu
     public IActionResult GetStudentView()
     {
         IEnumerable<IPublishedContent> rootnodes = umbracoHelper.ContentAtRoot();
-        var studentnodes = rootnodes.SelectMany(x => x.DescendantsOrSelf()).Where(x => x.ContentType.Alias == "student");
+        var NewStudentNodes = rootnodes.SelectMany(x => x.DescendantsOrSelf()).Where(x => x.ContentType.Alias == "student");
 
 
 
-        var student = studentnodes.Select(node =>
+        var studentDetail = NewStudentNodes.Select(studentNode =>
         {
 
-            var courseNodes = node.Value<IEnumerable<IPublishedContent>>("eduPicker");
+            var NewCourseNode = studentNode.Value<IEnumerable<IPublishedContent>>("eduPicker");
 
             return new Student
             {
-                Id = node.Key,
-                Name = node.Name ?? "",
-                Age = node.Value<int>("age"),
-                Email = node.Value<string>("email") ?? "",
+                Id = studentNode.Key,
+                Name = studentNode.Name ?? "",
+                Age = studentNode.Value<int>("age"),
+                Email = studentNode.Value<string>("email") ?? "",
 
-                course = courseNodes?.Select(courseNode => new Courses
+                EduPicker = NewCourseNode?.Select(courseNode => new Courses
                 {
                     Id = courseNode.Key,
                     Name = courseNode.Name ?? "",
@@ -128,31 +128,31 @@ public class StudentController1(UmbracoHelper umbracoHelper, StudentServices stu
             };
             
         }).ToList();
-        return View("studentview", student);
+        return View("studentview", studentDetail);
 
     }
 
 
 
         [HttpPost("create")]
-    public IActionResult createPostStudent([FromBody] StudentDTO students)
+    public IActionResult createPostStudent([FromBody] StudentDTO studentCreation)
     {
-        studentServices.studentCreation(students);
-        return Ok(students);
+        studentServices.studentCreation(studentCreation);
+        return Ok(studentCreation);
 
     }
 
     [HttpPut("update/{id}")]
-    public IActionResult updatePostStudent(Guid Id, [FromBody] StudentDTO students)
+    public IActionResult updatePostStudent(Guid Id, [FromBody] StudentDTO studentUpdate)
     {
-        studentServices.studentUpdate(Id, students);
-        return Ok(students);
+        studentServices.studentUpdate(Id, studentUpdate);
+        return Ok(studentUpdate);
     }
 
     [HttpPatch("patch/{id}")]
-    public IActionResult patchPostStudent(Guid Id, [FromBody] StudentPatchDTO students)
+    public IActionResult patchPostStudent(Guid Id, [FromBody] StudentPatchDTO studentPatch)
     {
-        studentServices.studentPatch(Id, students);
+        studentServices.studentPatch(Id, studentPatch);
         return Ok("patch success");
     }
 

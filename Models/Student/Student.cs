@@ -10,7 +10,7 @@ public class Student
 
     public string Email { get; set; } = string.Empty;
 
-    public List<Courses>? course { get; set; } = [];
+    public List<Courses>? EduPicker { get; set; } = [];
 
 
 }

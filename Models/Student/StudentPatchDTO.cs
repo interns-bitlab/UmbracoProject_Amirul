@@ -9,6 +9,6 @@ public class StudentPatchDTO
 
     public string Email { get; set; } = string.Empty;
 
-    public List<Guid>? eduPicker { get; set; } = [];
+    public List<Guid>? EduPicker { get; set; } = [];
 }
 

@@ -54,31 +54,31 @@ public class CourseController(UmbracoHelper umbracoHelper, CourseServices course
     }
 
     [HttpPost("create")]
-    public IActionResult CreateSubject([FromBody] CourseDTO course)
+    public IActionResult CreateSubject([FromBody] CourseDTO courseCreation)
 
     {
 
-        Console.WriteLine($"Received Date: {course?.dateTaken}"); 
+        Console.WriteLine($"Received Date: {courseCreation?.dateTaken}"); 
 
-    if (course?.dateTaken == null) {
+    if (courseCreation?.dateTaken == null) {
         // If it's null here, Postman sent the wrong format or the DTO can't read it.
     }
-        courseServices.CreateCourse(course);
+        courseServices.CreateCourse(courseCreation);
         return Ok();
     }
 
     [HttpPut("update/{id}")]
-    public IActionResult UpdateSubject(Guid Id, [FromBody] CourseUpdateDTO course)
+    public IActionResult UpdateSubject(Guid Id, [FromBody] CourseUpdateDTO courseUpdate)
     {
-        courseServices.UpdateCourse(Id, course);
+        courseServices.UpdateCourse(Id, courseUpdate);
         return Ok();
     }
 
 
     [HttpPatch("patch/{id}")]
-    public IActionResult PatchSubject(Guid Id, [FromBody] CoursePatchDTO course)
+    public IActionResult PatchSubject(Guid Id, [FromBody] CoursePatchDTO coursePatch)
     {
-        courseServices.UpdatePatchCourse(Id, course);
+        courseServices.UpdatePatchCourse(Id, coursePatch);
         return Ok();
     }
 

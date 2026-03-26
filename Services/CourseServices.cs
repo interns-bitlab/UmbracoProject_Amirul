@@ -10,20 +10,20 @@ namespace MyCustomUmbracoProject.Services;
 
 public class CourseServices(IContentService contentService, IJsonSerializer _jsonSerializer)
 {
-    public void CreateCourse(CourseDTO course)
+    public void CreateCourse(CourseDTO courseCreation)
     {
         var parentId = Guid.Parse("a9c2448a-a55f-4987-a588-e035b7a54be9");
-        var newCourse = contentService.Create(course.Name, parentId, "subjectName");
+        var newCourse = contentService.Create(courseCreation.Name, parentId, "subjectName");
 
-        newCourse.SetValue("creditHours", course.creditHour);
-        newCourse.SetValue("courseName", course.courseName);
+        newCourse.SetValue("creditHours", courseCreation.creditHour);
+        newCourse.SetValue("courseName", courseCreation.courseName);
 
-        if (course.dateTaken.HasValue)
+        if (courseCreation.dateTaken.HasValue)
         {
             // 1. Convert your DTO date to DateTimeOffset at midnight
             // Note: If your DTO is already DateTime, use: DateOnly.FromDateTime(course.dateTaken.Value)
 
-            DateTimeOffset dateTimeOffset = course.dateTaken.Value.ToDateTime(TimeOnly.MinValue);//dia tukarkan jadi midnight
+            DateTimeOffset dateTimeOffset = courseCreation.dateTaken.Value.ToDateTime(TimeOnly.MinValue);//dia tukarkan jadi midnight
 
             // 2. Wrap it in the special Umbraco JSON object
             var dateObject = new DateOnlyValue { Date = dateTimeOffset };//dia simpan dalam satu variable yang ada object model 
@@ -41,20 +41,20 @@ public class CourseServices(IContentService contentService, IJsonSerializer _jso
         contentService.Publish(newCourse, new[] { "*" });
     }
 
-    public void UpdateCourse(Guid Id, CourseUpdateDTO course)
+    public void UpdateCourse(Guid Id, CourseUpdateDTO courseUpdate)
     {
         var existingCourse = contentService.GetById(Id);
         if (existingCourse == null)
         {
             throw new ArgumentException("Course Not Found");
         }
-        existingCourse.Name = course.Name;
-        existingCourse.SetValue("creditHours", course.creditHour);
-        existingCourse.SetValue("courseName", course.courseName);
+        existingCourse.Name = courseUpdate.Name;
+        existingCourse.SetValue("creditHours", courseUpdate.creditHour);
+        existingCourse.SetValue("courseName", courseUpdate.courseName);
 
-        if (course.dateTaken.HasValue)
+        if (courseUpdate.dateTaken.HasValue)
         {
-            DateTimeOffset dateTimeOffset = course.dateTaken.Value.ToDateTime(TimeOnly.MinValue);
+            DateTimeOffset dateTimeOffset = courseUpdate.dateTaken.Value.ToDateTime(TimeOnly.MinValue);
 
             var dateObject = new DateOnlyValue{Date = dateTimeOffset};
 
@@ -72,7 +72,7 @@ public class CourseServices(IContentService contentService, IJsonSerializer _jso
         contentService.Publish(existingCourse, new[] { "*" });
     }
 
-    public void UpdatePatchCourse(Guid Id, CoursePatchDTO course)
+    public void UpdatePatchCourse(Guid Id, CoursePatchDTO coursePatch)
     {
         var existingCourse = contentService.GetById(Id);
         if (existingCourse == null)
@@ -80,24 +80,24 @@ public class CourseServices(IContentService contentService, IJsonSerializer _jso
             throw new ArgumentException("Course Not Found");
         }
         
-        if (!string.IsNullOrEmpty(course.Name))
+        if (!string.IsNullOrEmpty(coursePatch.Name))
         {
-            existingCourse.Name = course.Name;
+            existingCourse.Name = coursePatch.Name;
          
         }
-        if (course.creditHour.HasValue)
+        if (coursePatch.creditHour.HasValue)
         {
-            existingCourse.SetValue("creditHours", course.creditHour.Value);
+            existingCourse.SetValue("creditHours", coursePatch.creditHour.Value);
         }
-        if (!string.IsNullOrEmpty(course.courseName))
+        if (!string.IsNullOrEmpty(coursePatch.courseName))
         {
-            existingCourse.SetValue("courseName", course.courseName);
+            existingCourse.SetValue("courseName", coursePatch.courseName);
         }
 
         // ✅ CORRECT - simple DateTime conversion
-        if (course.dateTaken.HasValue)
+        if (coursePatch.dateTaken.HasValue)
         {
-            DateTime dateTime = course.dateTaken.Value.ToDateTime(TimeOnly.MinValue);
+            DateTime dateTime = coursePatch.dateTaken.Value.ToDateTime(TimeOnly.MinValue);
 
             var dateObject = new DateOnlyValue { Date = dateTime };
 

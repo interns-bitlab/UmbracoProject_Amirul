@@ -22,16 +22,16 @@ public class StudentServices(IContentService contentServices)
         return string.Join(",", pageUdi);
     }
    
-    public void studentCreation(StudentDTO students)
+    public void studentCreation(StudentDTO studentCreation)
     {
         var parentId = Guid.Parse("dec5212e-a2c8-4dfd-8425-e393d8faaeb1");
-        var student = contentServices.Create(students.Name, parentId, "student");
-        var eduPickerValue = AllResults(students.eduPicker);
+        var student = contentServices.Create(studentCreation.Name, parentId, "student");
+        var eduPickerValue = AllResults(studentCreation.EduPicker);
 
 
-        student.SetValue("age", students.Age);
-        student.SetValue("email", students.Email);
-        if (students.eduPicker != null)
+        student.SetValue("age", studentCreation.Age);
+        student.SetValue("email", studentCreation.Email);
+        if (studentCreation.EduPicker != null)
         {
             student.SetValue("eduPicker", eduPickerValue);
         }
@@ -42,19 +42,19 @@ public class StudentServices(IContentService contentServices)
 
     }
 
-    public void studentUpdate(Guid Id, StudentDTO students)
+    public void studentUpdate(Guid Id, StudentDTO studentUpdate)
     {
         var student = contentServices.GetById(Id);
-        var eduPickerValue = AllResults(students.eduPicker);
+        var eduPickerValue = AllResults(studentUpdate.EduPicker);
 
         if(student == null)
         {
             throw new ArgumentException("Student Missing");
         }
 
-        student.Name = students.Name;
-        student.SetValue("age", students.Age);
-        if(students != null)
+        student.Name = studentUpdate.Name;
+        student.SetValue("age", studentUpdate.Age);
+        if(studentUpdate != null)
         {
             student.SetValue("eduPicker", eduPickerValue);
         }
@@ -66,25 +66,25 @@ public class StudentServices(IContentService contentServices)
     }
 
 
-    public void studentPatch(Guid Id, StudentPatchDTO students)
+    public void studentPatch(Guid Id, StudentPatchDTO studentPatch)
     {
         var student = contentServices.GetById(Id);
-        var eduPickerValue = AllResults(students.eduPicker);
+        var eduPickerValue = AllResults(studentPatch.EduPicker);
 
         if(student == null)
         {
             throw new ArgumentException("student is missing");
         }
 
-        if (!string.IsNullOrEmpty(students.Name))
+        if (!string.IsNullOrEmpty(studentPatch.Name))
         {
-            student.Name = students.Name;
+            student.Name = studentPatch.Name;
         }
-        if (students.Age.HasValue)
+        if (studentPatch.Age.HasValue)
         {
-            student.SetValue("age", students.Age.Value);
+            student.SetValue("age", studentPatch.Age.Value);
         }
-        if (students.eduPicker != null)
+        if (studentPatch.EduPicker != null)
         {
             student.SetValue("eduPicker", eduPickerValue);
         }
